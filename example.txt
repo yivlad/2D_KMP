@@ -1,0 +1,11 @@
+7 7 3 3
+b b a b b a b
+a a c a c b a
+b b b a c a c
+a c a b b a b
+c a a c a b a
+b b b b a c c
+a c c a b a b
+a c a
+b b a
+c a b
