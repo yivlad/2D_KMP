@@ -1,10 +1,17 @@
 from aho_corasick import Automaton
 from knuth_morris_pratt import Pattern
+import argparse
 
 M = []
 P = []
 
-with open('example.txt', 'r') as file:
+parser = argparse.ArgumentParser(description="Algorithm for finding patterns in 2D")
+parser.add_argument("input_filename", metavar="IN", type=str, help="Input file containing search and pattern matrices")
+parser.add_argument("output_filename", metavar="OUT", type=str, help="Output file containing indices of matches")
+args = parser.parse_args()
+
+
+with open(args.input_filename, 'r') as file:
     sizes = file.readline().split()
     m = int(sizes[0])
     n = int(sizes[1])
@@ -33,6 +40,6 @@ for j, row in enumerate(Mp):
         j_in_M = j - a + 1  # current j is the last row of a match and we want its first row
         matches_ij.append((j_in_M + 1, match_i + 1))  # we add 1 to i and j for one based indexing
 
-with open("output.txt", "w") as file:
+with open(args.output_filename, "w") as file:
     file.write(f"{len(matches_ij)}\n")
     file.writelines([f"{i} {j}\n" for (i, j) in matches_ij])
