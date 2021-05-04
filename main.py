@@ -1,4 +1,5 @@
 from aho_corasick import Automaton
+from knuth_morris_pratt import Pattern
 
 M = []
 P = []
@@ -15,7 +16,7 @@ with open('example.txt', 'r') as file:
         P.append(file.readline().split())
 
 automaton = Automaton()
-print(automaton.build(list(map(list, zip(*P)))))
+column_end_states = automaton.build(list(map(list, zip(*P))))
 Mp = [[-1] * len(M[i]) for i in range(len(M))]
 
 for i in range(len(M[0])):
@@ -24,4 +25,14 @@ for i in range(len(M[0])):
         automaton.go(M[j][i])
         Mp[j][i] = automaton.state.num
 
-print("\n".join(["".join(map(str, row)) for row in Mp]))
+kmp_pattern = Pattern(column_end_states)
+matches_ij = []
+for j, row in enumerate(Mp):
+    matches_in_row = kmp_pattern.find_matches(row)
+    for match_i in matches_in_row:
+        j_in_M = j - a + 1  # current j is the last row of a match and we want its first row
+        matches_ij.append((j_in_M + 1, match_i + 1))  # we add 1 to i and j for one based indexing
+
+with open("output.txt", "w") as file:
+    file.write(f"{len(matches_ij)}\n")
+    file.writelines([f"{i} {j}\n" for (i, j) in matches_ij])
