@@ -12,7 +12,7 @@ def main():
         with open(file_path, "w") as file:
             search, pattern = create_matrices(args.search_matrix_height, args.search_matrix_width,
                                               args.pattern_matrix_height, args.pattern_matrix_height,
-                                              args.max_element_value)
+                                              args.maxvalue)
             file_contents = to_file(search, pattern)
             file.write(file_contents)
 
@@ -29,7 +29,7 @@ def parse_args():
                         help="Height of pattern matrix in generated files")
     parser.add_argument("pattern_matrix_width", metavar="B", type=int,
                         help="Width of pattern matrix in generated files")
-    parser.add_argument("max_element_value", metavar="MAX_EL", type=int,
+    parser.add_argument("--maxvalue", type=int, dest="maxvalue",
                         help="Maximum value of an element (default=10)", default=10)
     args = parser.parse_args()
     if args.search_matrix_width < args.pattern_matrix_width or args.search_matrix_width < args.pattern_matrix_width:
