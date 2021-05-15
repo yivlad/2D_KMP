@@ -12,7 +12,7 @@ def main():
         with open(file_path, "w") as file:
             search, pattern = create_matrices(args.search_matrix_height, args.search_matrix_width,
                                               args.pattern_matrix_height, args.pattern_matrix_height,
-                                              args.maxvalue)
+                                              args.maxvalue, args.appearances)
             file_contents = to_file(search, pattern)
             file.write(file_contents)
 
@@ -31,6 +31,8 @@ def parse_args():
                         help="Width of pattern matrix in generated files")
     parser.add_argument("--maxvalue", type=int, dest="maxvalue",
                         help="Maximum value of an element (default=10)", default=10)
+    parser.add_argument("--appearances", type=int, dest="appearances",
+                        help="Attempted number of appearances of pattern in search matrix (default=5)", default=5)
     args = parser.parse_args()
     if args.search_matrix_width < args.pattern_matrix_width or args.search_matrix_width < args.pattern_matrix_width:
         print(f"Invalid args, search matrix too small", file=stderr)
@@ -53,10 +55,10 @@ def mat_to_str(mat):
     return "\n".join([" ".join([str(el) for el in row]) for row in mat])
 
 
-def create_matrices(search_h, search_w, pattern_h, pattern_w, max_el):
+def create_matrices(search_h, search_w, pattern_h, pattern_w, max_el, appearances):
     search = [[randint(0, max_el) for _ in range(search_w)] for _ in range(search_h)]
     pattern = [[randint(0, max_el) for _ in range(pattern_w)] for _ in range(pattern_h)]
-    for _ in range(0, 5):
+    for _ in range(0, appearances):
         y_0 = randint(0, search_h - pattern_h)
         x_0 = randint(0, search_w - pattern_w)
         for y in range(y_0, y_0 + pattern_h):
