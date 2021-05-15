@@ -80,8 +80,8 @@ def create_matrices(search_h, search_w, pattern_h, pattern_w, max_el, appearance
             overlap_y0 = pattern_h - overlap_h
             for y in range(overlap_y0, pattern_h):
                 pattern[y][overlap_x0:pattern_w] = pattern[y-overlap_y0][0:overlap_w]
-            y_0 = randint(0, search_h - pattern_h - overlap_x0)
-            x_0 = randint(0, search_w - pattern_w - overlap_y0)
+            y_0 = randint(0, search_h - pattern_h - overlap_y0)
+            x_0 = randint(0, search_w - pattern_w - overlap_x0)
             y_1 = y_0+overlap_y0
             x_1 = x_0+overlap_x0
             for y in range(y_0, y_0 + pattern_h):
