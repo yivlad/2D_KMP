@@ -1,45 +1,22 @@
-from aho_corasick import Automaton
-from knuth_morris_pratt import Pattern
 import argparse
+from baker_bird import BakerBird
+from naive import NaiveSearch
+from files_io import from_file, to_file
 
-M = []
-P = []
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Algorithm for finding patterns in 2D")
+    parser.add_argument("input_filename", metavar="IN", type=str, help="Input file containing search and pattern matrices")
+    parser.add_argument("output_filename", metavar="OUT", type=str, help="Output file containing indices of matches")
+    parser.add_argument('--naive', default=False, action='store_true', help="Use naive quadratic time algorithm instead of Baker-Bird algorithm")
+    args = parser.parse_args()
 
-parser = argparse.ArgumentParser(description="Algorithm for finding patterns in 2D")
-parser.add_argument("input_filename", metavar="IN", type=str, help="Input file containing search and pattern matrices")
-parser.add_argument("output_filename", metavar="OUT", type=str, help="Output file containing indices of matches")
-args = parser.parse_args()
+    (M, P) = from_file(args.input_filename)
 
+    strategy = None
+    if args.naive:
+        strategy = NaiveSearch()
+    else:
+        strategy = BakerBird()
+    matches_ij = strategy.find(M, P)
 
-with open(args.input_filename, 'r') as file:
-    sizes = file.readline().split()
-    m = int(sizes[0])
-    n = int(sizes[1])
-    a = int(sizes[2])
-    b = int(sizes[3])
-    for _ in range(m):
-        M.append(file.readline().split())
-    for _ in range(a):
-        P.append(file.readline().split())
-
-automaton = Automaton()
-column_end_states = automaton.build(list(map(list, zip(*P))))
-Mp = [[-1] * len(M[i]) for i in range(len(M))]
-
-for i in range(len(M[0])):
-    automaton.reset()
-    for j in range(len(M)):
-        automaton.go(M[j][i])
-        Mp[j][i] = automaton.state.num
-
-kmp_pattern = Pattern(column_end_states)
-matches_ij = []
-for j, row in enumerate(Mp):
-    matches_in_row = kmp_pattern.find_matches(row)
-    for match_i in matches_in_row:
-        j_in_M = j - a + 1  # current j is the last row of a match and we want its first row
-        matches_ij.append((j_in_M + 1, match_i + 1))  # we add 1 to i and j for one based indexing
-
-with open(args.output_filename, "w") as file:
-    file.write(f"{len(matches_ij)}\n")
-    file.writelines([f"{i} {j}\n" for (i, j) in matches_ij])
+    to_file(args.output_filename, matches_ij)

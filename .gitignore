@@ -137,3 +137,6 @@ dmypy.json
 cython_debug/
 
 .idea/
+
+#For tests
+output.txt
