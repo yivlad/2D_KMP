@@ -13,4 +13,4 @@ def from_file(filename):
         for _ in range(a):
             P.append(file.readline().split())
 
-    return (M, P)
+    return M, P

@@ -1,10 +1,12 @@
 from .state import State
 
+
 class Automaton:
     def __init__(self):
         self._root = State(0, True)
         self._root.failure_link = self._root
         self._v = 1
+        self.state = self._root
 
     def reset(self):
         self.state = self._root
@@ -43,4 +45,3 @@ class Automaton:
         while self.state.get(c) is None:
             self.state = self.state.failure_link
         self.state = self.state.get(c)
-        

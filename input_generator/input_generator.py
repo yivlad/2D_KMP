@@ -16,11 +16,11 @@ class InputGenerator:
     def create_matrices(self):
         search = [[randint(0, self.max_value) for _ in range(self.search_w)] for _ in range(self.search_h)]
         pattern = [[randint(0, self.max_value) for _ in range(self.pattern_w)] for _ in range(self.pattern_h)]
-        overlap_chance = 1 / self.appearances
+        overlap_chance = 1 / self.appearances if self.overlap else 0
         i = 0
         while i < self.appearances:
-            overlap = random() <= overlap_chance
-            if overlap:
+            perform_overlap = random() <= overlap_chance
+            if perform_overlap:
                 i = i + 1
                 max_overlap_w = self.pattern_w // 2
                 max_overlap_h = self.pattern_h // 2
