@@ -1,6 +1,7 @@
 from .aho_corasick import Automaton
 from .knuth_morris_pratt import Pattern
 
+
 class BakerBird:
     def find(self, M, P):
         automaton = Automaton()
