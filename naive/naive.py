@@ -1,11 +1,13 @@
 class NaiveSearch:
     def _check(self, M, P, i, j):
+        result = True
+
         for x in range(len(P)):
             for y in range(len(P[x])):
                 if M[i + x][j + y] != P[x][y]:
-                    return False
+                    result = False
 
-        return True
+        return result
 
     def find(self, M, P):
         matches_ij = []
