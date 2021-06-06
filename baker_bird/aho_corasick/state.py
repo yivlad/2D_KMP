@@ -1,8 +1,8 @@
 class State:
-    def __init__(self, num, lookup_table, child_count, is_root = False):
+    def __init__(self, num, lookup_table, child_count, is_root=False):
         self.num = num
         self.failure_link = None
-        self._children = [None]*child_count
+        self._children = [None] * child_count
         self._root = is_root
         self._lookup_table = lookup_table
         self._children_list = []
@@ -12,18 +12,32 @@ class State:
         self._children_list.append(child)
 
     def get(self, c):
-        c_id = self._lookup_table[c]
         if self._root:
-            return self._children[c_id] or self
-        return self._children[c_id]
+            return self._get(c) or self
+        return self._get(c)
+
+    def _get(self, c):
+        if c >= len(self._lookup_table):
+            return None
+        c_id = self._lookup_table[c]
+        return self._get_no_lookup(c_id)
 
     def get_no_lookup(self, c_id):
         if self._root:
-            return self._children[c_id] or self
+            return self._get_no_lookup(c_id) or self
+        return self._get_no_lookup(c_id)
+
+    def _get_no_lookup(self, c_id):
+        if c_id < 0:
+            return None
         return self._children[c_id]
 
     def get_link(self, c):
+        if c >= len(self._lookup_table):
+            return None
         c_id = self._lookup_table[c]
+        if c_id < 0:
+            return None
         return self._children[c_id]
 
     def get_children(self):

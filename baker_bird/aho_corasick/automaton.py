@@ -53,7 +53,7 @@ class Automaton:
 
     def load_lookup_table(self, words):
         symbols = set([symbol for word in words for symbol in word])
-        self._lookup_table = [0]*(max(symbols)+1)
+        self._lookup_table = [-1]*(max(symbols)+1)
         i = 0
         for symbol in symbols:
             self._lookup_table[symbol] = i
