@@ -9,8 +9,8 @@ def from_file(filename):
         a = int(sizes[2])
         b = int(sizes[3])
         for _ in range(m):
-            M.append(file.readline().split())
+            M.append([int(symbol) for symbol in file.readline().split()])
         for _ in range(a):
-            P.append(file.readline().split())
+            P.append([int(symbol) for symbol in file.readline().split()])
 
     return M, P
