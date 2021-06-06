@@ -3,20 +3,25 @@ from .state import State
 
 class Automaton:
     def __init__(self):
-        self._root = State(0, True)
-        self._root.failure_link = self._root
+        self._root = None
+        self.state = None
         self._v = 1
-        self.state = self._root
+        self._lookup_table = []
+        self._children_count = 0
 
     def reset(self):
         self.state = self._root
 
     def _get_new_state(self):
-        state = State(self._v)
+        state = State(self._v, self._lookup_table, self._children_count)
         self._v += 1
         return state
 
     def build(self, words):
+        self.load_lookup_table(words)
+        self._root = State(0, self._lookup_table, self._children_count, True)
+        self._root.failure_link = self._root
+        self.state = self._root
         word_states = []
         for word in words:
             state = self._root
@@ -32,11 +37,11 @@ class Automaton:
             queue.append(child)
         while len(queue) > 0:
             state = queue.pop(0)
-            for c, child in state.get_links():
+            for c_id, child in state.get_links():
                 failure = state.failure_link
-                while failure.get(c) is None:
+                while failure.get_no_lookup(c_id) is None:
                     failure = failure.failure_link
-                child.failure_link = failure.get(c)
+                child.failure_link = failure.get_no_lookup(c_id)
                 queue.append(child)
 
         return word_states
@@ -45,3 +50,12 @@ class Automaton:
         while self.state.get(c) is None:
             self.state = self.state.failure_link
         self.state = self.state.get(c)
+
+    def load_lookup_table(self, words):
+        symbols = set([symbol for word in words for symbol in word])
+        self._lookup_table = [-1]*(max(symbols)+1)
+        i = 0
+        for symbol in symbols:
+            self._lookup_table[symbol] = i
+            i = i+1
+        self._children_count = len(symbols)
