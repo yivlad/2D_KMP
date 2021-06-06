@@ -52,10 +52,10 @@ class Automaton:
         self.state = self.state.get(c)
 
     def load_lookup_table(self, words):
-        letters = set([letter for word in words for letter in word])
-        self._lookup_table = [0]*(max(letters)+1)
+        symbols = set([symbol for word in words for symbol in word])
+        self._lookup_table = [0]*(max(symbols)+1)
         i = 0
-        for letter in letters:
-            self._lookup_table[letter] = i
+        for symbol in symbols:
+            self._lookup_table[symbol] = i
             i = i+1
-        self._children_count = len(letters)
+        self._children_count = len(symbols)
